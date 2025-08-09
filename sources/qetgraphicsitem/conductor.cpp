@@ -1043,9 +1043,10 @@ QDomElement Conductor::toXml(QDomDocument &dom_document,
 {
 	QDomElement dom_element = dom_document.createElement("conductor");
 
-	dom_element.setAttribute("x", QString::number(pos().x()));
-	dom_element.setAttribute("y", QString::number(pos().y()));
-	
+	// make sure positions aren't negative to prevent large unwanted margins:
+	dom_element.setAttribute("x", (pos().x() < 0) ? QString::number(0) : QString::number(pos().x()));
+	dom_element.setAttribute("y", (pos().y() < 0) ? QString::number(0) : QString::number(pos().x()));
+
 	// Terminal is uniquely identified by the uuid of the terminal and the element
 	if (terminal1->uuid().isNull()) {
 		// legacy method to identify the terminal
